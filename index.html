@@ -1,0 +1,951 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>미소드림치과의원</title>
+<style>
+  /* ── Reset & Base ── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --sky:   #4AAEDC;
+    --navy:  #1A3557;
+    --mint:  #E8F7FB;
+    --sand:  #FDF8F3;
+    --text:  #2D3A45;
+    --muted: #6B7E8F;
+    --white: #FFFFFF;
+    --radius: 16px;
+    --shadow: 0 4px 24px rgba(26,53,87,.10);
+  }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+    color: var(--text);
+    background: var(--white);
+    line-height: 1.6;
+  }
+  a { text-decoration: none; color: inherit; }
+  img { display: block; max-width: 100%; }
+
+  /* ── Utility ── */
+  .container { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+  .section-label {
+    display: inline-block;
+    background: var(--mint);
+    color: var(--sky);
+    font-size: .75rem;
+    font-weight: 700;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 99px;
+    margin-bottom: 12px;
+  }
+  .section-title {
+    font-size: clamp(1.5rem, 3vw, 2.2rem);
+    font-weight: 800;
+    line-height: 1.25;
+    color: var(--navy);
+    margin-bottom: 12px;
+  }
+  .section-sub {
+    font-size: 1rem;
+    color: var(--muted);
+    margin-bottom: 48px;
+  }
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--sky);
+    color: var(--white);
+    font-size: 1rem;
+    font-weight: 700;
+    padding: 14px 28px;
+    border-radius: 99px;
+    border: none;
+    cursor: pointer;
+    transition: background .2s, transform .15s;
+  }
+  .btn-primary:hover { background: var(--navy); transform: translateY(-2px); }
+  .btn-outline {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: transparent;
+    color: var(--white);
+    font-size: 1rem;
+    font-weight: 700;
+    padding: 14px 28px;
+    border-radius: 99px;
+    border: 2px solid rgba(255,255,255,.6);
+    cursor: pointer;
+    transition: background .2s;
+  }
+  .btn-outline:hover { background: rgba(255,255,255,.15); }
+
+  /* ── GNB ── */
+  .gnb {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(255,255,255,.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(74,174,220,.12);
+    transition: box-shadow .2s;
+  }
+  .gnb-inner {
+    display: flex; align-items: center; justify-content: space-between;
+    height: 64px;
+  }
+  .logo {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 1.15rem; font-weight: 900; color: var(--navy);
+  }
+  .logo-icon {
+    width: 36px; height: 36px;
+    background: var(--sky);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem;
+  }
+  .gnb-nav { display: flex; align-items: center; gap: 32px; }
+  .gnb-nav a {
+    font-size: .9rem; font-weight: 600; color: var(--muted);
+    transition: color .2s;
+  }
+  .gnb-nav a:hover { color: var(--sky); }
+  .gnb-cta {
+    background: var(--sky); color: var(--white);
+    padding: 9px 20px; border-radius: 99px;
+    font-size: .85rem; font-weight: 700;
+    border: none; cursor: pointer;
+    transition: background .2s;
+  }
+  .gnb-cta:hover { background: var(--navy); }
+
+  /* ── Hero ── */
+  .hero {
+    min-height: 100vh;
+    background: linear-gradient(135deg, var(--navy) 0%, #1e5a8a 50%, var(--sky) 100%);
+    display: flex; align-items: center;
+    padding: 96px 0 64px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 70% 80% at 70% 50%, rgba(74,174,220,.25) 0%, transparent 70%);
+  }
+  .hero-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: center;
+    position: relative;
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(255,255,255,.15);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255,255,255,.25);
+    border-radius: 99px;
+    padding: 6px 16px;
+    font-size: .82rem;
+    font-weight: 600;
+    color: rgba(255,255,255,.9);
+    margin-bottom: 20px;
+  }
+  .hero-title {
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 900;
+    color: var(--white);
+    line-height: 1.2;
+    margin-bottom: 20px;
+    word-break: keep-all;
+  }
+  .hero-title em {
+    font-style: normal;
+    color: #7ED4F5;
+  }
+  .hero-desc {
+    font-size: 1.05rem;
+    color: rgba(255,255,255,.8);
+    margin-bottom: 36px;
+    word-break: keep-all;
+    line-height: 1.75;
+  }
+  .hero-actions { display: flex; gap: 14px; flex-wrap: wrap; }
+  .hero-visual {
+    display: flex; flex-direction: column; gap: 16px;
+  }
+  .hero-card {
+    background: rgba(255,255,255,.12);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,.2);
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    color: var(--white);
+  }
+  .hero-card-top {
+    display: flex; align-items: center; gap: 12px; margin-bottom: 10px;
+  }
+  .hero-card-icon {
+    width: 44px; height: 44px;
+    background: rgba(255,255,255,.2);
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.4rem;
+    flex-shrink: 0;
+  }
+  .hero-card-label { font-size: .8rem; opacity: .7; margin-bottom: 2px; }
+  .hero-card-value { font-size: 1.05rem; font-weight: 700; }
+  .hero-card-bar {
+    height: 6px; background: rgba(255,255,255,.2); border-radius: 3px; overflow: hidden;
+  }
+  .hero-card-bar-fill {
+    height: 100%; border-radius: 3px; background: #7ED4F5;
+  }
+  .hero-stats {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+  }
+  .hero-stat {
+    background: rgba(255,255,255,.1);
+    border: 1px solid rgba(255,255,255,.15);
+    border-radius: 12px;
+    padding: 16px;
+    text-align: center;
+    color: var(--white);
+  }
+  .hero-stat-num {
+    font-size: 1.6rem; font-weight: 900; color: #7ED4F5;
+    line-height: 1;
+  }
+  .hero-stat-desc { font-size: .78rem; opacity: .75; margin-top: 4px; }
+
+  /* ── Notice bar ── */
+  .notice-bar {
+    background: var(--navy);
+    color: rgba(255,255,255,.85);
+    font-size: .85rem;
+    text-align: center;
+    padding: 12px 24px;
+    letter-spacing: .02em;
+  }
+  .notice-bar strong { color: #7ED4F5; }
+
+  /* ── Services ── */
+  .services {
+    background: var(--white);
+    padding: 96px 0;
+  }
+  .services-header { text-align: center; }
+  .service-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+  .service-card {
+    background: var(--white);
+    border: 1.5px solid rgba(74,174,220,.15);
+    border-radius: var(--radius);
+    padding: 32px 28px;
+    transition: transform .2s, box-shadow .2s, border-color .2s;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .service-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 4px;
+    background: var(--sky);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform .25s;
+  }
+  .service-card:hover { transform: translateY(-4px); box-shadow: var(--shadow); border-color: var(--sky); }
+  .service-card:hover::before { transform: scaleX(1); }
+  .service-card.featured {
+    background: linear-gradient(135deg, var(--navy) 0%, #1e5a8a 100%);
+    border-color: transparent;
+    color: var(--white);
+  }
+  .service-card.featured::before { background: #7ED4F5; }
+  .service-icon {
+    width: 56px; height: 56px;
+    background: var(--mint);
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.6rem;
+    margin-bottom: 20px;
+  }
+  .service-card.featured .service-icon {
+    background: rgba(255,255,255,.15);
+  }
+  .service-title {
+    font-size: 1.1rem; font-weight: 800;
+    margin-bottom: 10px; color: var(--navy);
+  }
+  .service-card.featured .service-title { color: var(--white); }
+  .service-desc {
+    font-size: .9rem; color: var(--muted); line-height: 1.65; word-break: keep-all;
+  }
+  .service-card.featured .service-desc { color: rgba(255,255,255,.75); }
+  .service-tag {
+    display: inline-block;
+    margin-top: 16px;
+    background: var(--mint);
+    color: var(--sky);
+    font-size: .75rem; font-weight: 700;
+    padding: 3px 10px; border-radius: 99px;
+  }
+  .service-card.featured .service-tag {
+    background: rgba(126,212,245,.2);
+    color: #7ED4F5;
+  }
+
+  /* ── Doctor ── */
+  .doctor {
+    background: var(--sand);
+    padding: 96px 0;
+  }
+  .doctor-inner {
+    display: grid;
+    grid-template-columns: 380px 1fr;
+    gap: 64px;
+    align-items: center;
+  }
+  .doctor-photo-wrap {
+    position: relative;
+  }
+  .doctor-photo {
+    width: 100%; aspect-ratio: 3/4;
+    background: linear-gradient(160deg, #d6eaf8 0%, #aed6f1 100%);
+    border-radius: 24px;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    font-size: 5rem;
+    color: rgba(26,53,87,.3);
+    overflow: hidden;
+    position: relative;
+  }
+  .doctor-photo-label {
+    font-size: .8rem; font-weight: 600;
+    color: rgba(26,53,87,.4);
+    margin-top: 12px;
+  }
+  .doctor-badge-float {
+    position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%);
+    background: var(--navy);
+    color: var(--white);
+    border-radius: 12px;
+    padding: 12px 20px;
+    display: flex; align-items: center; gap: 12px;
+    white-space: nowrap;
+    box-shadow: 0 8px 24px rgba(26,53,87,.3);
+  }
+  .badge-icon { font-size: 1.3rem; }
+  .badge-text-main { font-size: .95rem; font-weight: 800; }
+  .badge-text-sub { font-size: .78rem; opacity: .7; }
+  .doctor-info { }
+  .doctor-name {
+    font-size: 2rem; font-weight: 900; color: var(--navy); margin: 8px 0;
+  }
+  .doctor-role { font-size: .95rem; color: var(--sky); font-weight: 700; margin-bottom: 20px; }
+  .doctor-quote {
+    background: var(--white);
+    border-left: 4px solid var(--sky);
+    border-radius: 0 12px 12px 0;
+    padding: 16px 20px;
+    font-size: 1rem;
+    color: var(--text);
+    line-height: 1.7;
+    margin-bottom: 28px;
+    word-break: keep-all;
+  }
+  .doctor-careers { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .doctor-careers li {
+    display: flex; align-items: flex-start; gap: 10px;
+    font-size: .92rem; color: var(--text);
+  }
+  .career-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--sky);
+    margin-top: 6px; flex-shrink: 0;
+  }
+
+  /* ── Hours ── */
+  .hours {
+    background: var(--white);
+    padding: 96px 0;
+  }
+  .hours-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+  }
+  .hours-table { width: 100%; border-collapse: separate; border-spacing: 0; }
+  .hours-table th, .hours-table td {
+    padding: 14px 18px;
+    text-align: left;
+    font-size: .92rem;
+  }
+  .hours-table thead th {
+    background: var(--navy);
+    color: rgba(255,255,255,.85);
+    font-weight: 700;
+  }
+  .hours-table thead th:first-child { border-radius: 12px 0 0 0; }
+  .hours-table thead th:last-child { border-radius: 0 12px 0 0; }
+  .hours-table tbody tr:nth-child(even) { background: var(--mint); }
+  .hours-table tbody tr:last-child td:first-child { border-radius: 0 0 0 12px; }
+  .hours-table tbody tr:last-child td:last-child { border-radius: 0 0 12px 0; }
+  .hours-table td.day { font-weight: 700; color: var(--navy); }
+  .hours-table td.closed { color: #e57373; font-weight: 700; }
+  .hours-table td.highlight { color: var(--sky); font-weight: 700; }
+  .info-cards { display: flex; flex-direction: column; gap: 16px; }
+  .info-card {
+    display: flex; align-items: flex-start; gap: 16px;
+    background: var(--mint);
+    border-radius: var(--radius);
+    padding: 20px 22px;
+  }
+  .info-card-icon {
+    width: 44px; height: 44px;
+    background: var(--sky);
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.2rem;
+    color: var(--white);
+    flex-shrink: 0;
+  }
+  .info-card-title { font-size: .82rem; font-weight: 700; color: var(--muted); margin-bottom: 4px; }
+  .info-card-text { font-size: .95rem; font-weight: 600; color: var(--navy); line-height: 1.5; word-break: keep-all; }
+
+  /* ── Map (placeholder) ── */
+  .map-section {
+    background: var(--sand);
+    padding: 96px 0;
+  }
+  .map-inner {
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: 48px;
+    align-items: start;
+  }
+  .map-placeholder {
+    width: 100%; aspect-ratio: 16/9;
+    background: linear-gradient(135deg, #cfe8f7, #a8d4ef);
+    border-radius: var(--radius);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 12px;
+    color: var(--navy);
+    font-weight: 700;
+    position: relative;
+    overflow: hidden;
+  }
+  .map-placeholder::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: repeating-linear-gradient(
+      0deg, transparent, transparent 39px, rgba(26,53,87,.05) 39px, rgba(26,53,87,.05) 40px
+    ),
+    repeating-linear-gradient(
+      90deg, transparent, transparent 39px, rgba(26,53,87,.05) 39px, rgba(26,53,87,.05) 40px
+    );
+  }
+  .map-pin { font-size: 3rem; }
+  .map-label { font-size: 1rem; color: var(--navy); z-index: 1; }
+  .map-hint { font-size: .8rem; color: var(--muted); z-index: 1; }
+  .map-info-list { display: flex; flex-direction: column; gap: 20px; }
+  .map-info-item {
+    display: flex; gap: 14px; align-items: flex-start;
+  }
+  .map-info-icon {
+    width: 40px; height: 40px;
+    background: var(--sky);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem;
+    color: var(--white);
+    flex-shrink: 0;
+  }
+  .map-info-title { font-size: .78rem; font-weight: 700; color: var(--muted); margin-bottom: 2px; }
+  .map-info-text { font-size: .9rem; color: var(--navy); font-weight: 600; line-height: 1.5; word-break: keep-all; }
+
+  /* ── CTA Banner ── */
+  .cta-section {
+    background: linear-gradient(135deg, var(--navy) 0%, #1e5a8a 40%, var(--sky) 100%);
+    padding: 80px 0;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .cta-section::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 60% 80% at 50% 0%, rgba(126,212,245,.2) 0%, transparent 70%);
+  }
+  .cta-title {
+    font-size: clamp(1.6rem, 4vw, 2.4rem);
+    font-weight: 900;
+    color: var(--white);
+    margin-bottom: 12px;
+    word-break: keep-all;
+    position: relative;
+  }
+  .cta-desc {
+    font-size: 1rem;
+    color: rgba(255,255,255,.8);
+    margin-bottom: 36px;
+    word-break: keep-all;
+    position: relative;
+  }
+  .cta-buttons {
+    display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;
+    position: relative;
+  }
+  .btn-white {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--white);
+    color: var(--navy);
+    font-size: 1rem; font-weight: 700;
+    padding: 14px 28px;
+    border-radius: 99px; border: none; cursor: pointer;
+    transition: transform .15s, box-shadow .2s;
+  }
+  .btn-white:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,.15); }
+
+  /* ── Footer ── */
+  footer {
+    background: var(--text);
+    color: rgba(255,255,255,.6);
+    padding: 40px 0 28px;
+    font-size: .82rem;
+  }
+  .footer-inner {
+    display: flex; align-items: flex-start; justify-content: space-between; gap: 24px;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+  }
+  .footer-logo {
+    font-size: 1.1rem; font-weight: 900; color: var(--white);
+    margin-bottom: 6px;
+  }
+  .footer-copy { line-height: 1.7; }
+  .footer-links { display: flex; gap: 16px; flex-wrap: wrap; }
+  .footer-links a { color: rgba(255,255,255,.6); transition: color .2s; }
+  .footer-links a:hover { color: var(--white); }
+  .footer-divider { border: none; border-top: 1px solid rgba(255,255,255,.1); margin-bottom: 16px; }
+  .footer-bottom { text-align: center; font-size: .78rem; color: rgba(255,255,255,.35); }
+
+  /* ── Floating CTA ── */
+  .float-cta {
+    position: fixed; bottom: 28px; right: 28px; z-index: 200;
+    display: flex; flex-direction: column; gap: 10px;
+    align-items: flex-end;
+  }
+  .float-btn {
+    display: flex; align-items: center; gap: 10px;
+    background: var(--sky);
+    color: var(--white);
+    font-size: .88rem; font-weight: 700;
+    padding: 12px 20px;
+    border-radius: 99px;
+    box-shadow: 0 4px 20px rgba(74,174,220,.45);
+    border: none; cursor: pointer;
+    transition: background .2s, transform .15s;
+    white-space: nowrap;
+  }
+  .float-btn:hover { background: var(--navy); transform: translateY(-2px); }
+  .float-btn.kakao { background: #FEE500; color: #3C1E1E; box-shadow: 0 4px 20px rgba(254,229,0,.4); }
+  .float-btn.kakao:hover { background: #f0d800; }
+
+  /* ── Responsive ── */
+  @media (max-width: 768px) {
+    .gnb-nav { display: none; }
+    .hero-inner { grid-template-columns: 1fr; }
+    .hero-visual { display: none; }
+    .service-grid { grid-template-columns: 1fr; }
+    .doctor-inner { grid-template-columns: 1fr; }
+    .doctor-photo { aspect-ratio: 4/3; }
+    .hours-inner { grid-template-columns: 1fr; }
+    .map-inner { grid-template-columns: 1fr; }
+    .footer-inner { flex-direction: column; }
+    .float-cta { bottom: 16px; right: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── GNB ── -->
+<nav class="gnb">
+  <div class="container gnb-inner">
+    <a href="#" class="logo">
+      <span class="logo-icon">🦷</span>
+      미소드림치과
+    </a>
+    <div class="gnb-nav">
+      <a href="#services">진료과목</a>
+      <a href="#doctor">원장소개</a>
+      <a href="#hours">진료시간</a>
+      <a href="#map">오시는길</a>
+    </div>
+    <button class="gnb-cta" onclick="alert('예약 기능은 실제 사이트에서 연동합니다.')">📞 전화상담</button>
+  </div>
+</nav>
+
+<!-- ── Hero ── -->
+<section class="hero" id="top">
+  <div class="container hero-inner">
+    <!-- Left: Copy -->
+    <div>
+      <div class="hero-badge">📍 판교 중심 &nbsp;·&nbsp; 경력 10년+ 전문의</div>
+      <h1 class="hero-title">
+        치과가<br>
+        <em>무섭지 않아도</em><br>
+        되는 곳
+      </h1>
+      <p class="hero-desc">
+        오기 전 걱정이 가장 컸다는 분들이<br>
+        "이렇게 편한 줄 몰랐다"고 돌아갑니다.<br>
+        판교 미소드림치과에서 첫 발걸음을 내딛어보세요.
+      </p>
+      <div class="hero-actions">
+        <button class="btn-primary" onclick="alert('예약 기능은 실제 사이트에서 연동합니다.')">
+          🗓 지금 예약하기
+        </button>
+        <button class="btn-outline" onclick="document.getElementById('services').scrollIntoView({behavior:'smooth'})">
+          진료과목 보기 →
+        </button>
+      </div>
+    </div>
+    <!-- Right: Visual cards -->
+    <div class="hero-visual">
+      <div class="hero-card">
+        <div class="hero-card-top">
+          <div class="hero-card-icon">🦷</div>
+          <div>
+            <div class="hero-card-label">오늘의 진료</div>
+            <div class="hero-card-value">임플란트 상담</div>
+          </div>
+        </div>
+        <div style="font-size:.82rem;opacity:.7;margin-bottom:8px;">통증 최소화 · 당일 CT 가능</div>
+        <div class="hero-card-bar"><div class="hero-card-bar-fill" style="width:88%"></div></div>
+      </div>
+      <div class="hero-card">
+        <div class="hero-card-top">
+          <div class="hero-card-icon">😊</div>
+          <div>
+            <div class="hero-card-label">내원 만족도</div>
+            <div class="hero-card-value">98.2%</div>
+          </div>
+        </div>
+        <div style="font-size:.82rem;opacity:.7;margin-bottom:8px;">"편안하게 치료받았어요"</div>
+        <div class="hero-card-bar"><div class="hero-card-bar-fill" style="width:98%"></div></div>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <div class="hero-stat-num">5,000+</div>
+          <div class="hero-stat-desc">임플란트 시술 건수</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-num">10년+</div>
+          <div class="hero-stat-desc">판교 지역 진료 경력</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Notice Bar ── -->
+<div class="notice-bar">
+  📢 <strong>토요일 09:00–14:00</strong> 진료 운영 중 &nbsp;|&nbsp; 점심시간 없이 연속 진료 &nbsp;|&nbsp; 야간 진료: 화·목 <strong>19:30</strong>까지
+</div>
+
+<!-- ── Services ── -->
+<section class="services" id="services">
+  <div class="container">
+    <div class="services-header">
+      <span class="section-label">진료과목</span>
+      <h2 class="section-title">어떤 고민이든,<br>편안하게 말씀해 주세요</h2>
+      <p class="section-sub">임플란트·교정을 중심으로 모든 치과 진료를 한 곳에서 해결합니다.</p>
+    </div>
+    <div class="service-grid">
+
+      <div class="service-card featured">
+        <div class="service-icon">🦷</div>
+        <div class="service-title">임플란트</div>
+        <div class="service-desc">
+          뼈 이식부터 보철까지 한 병원에서 완결. CT 당일 촬영, 최소 절개 방식으로 회복을 줄였습니다.
+        </div>
+        <span class="service-tag">⭐ 주력 진료</span>
+      </div>
+
+      <div class="service-card featured" style="background: linear-gradient(135deg,#1a6b8a,#2196c4);">
+        <div class="service-icon">😁</div>
+        <div class="service-title">치아 교정</div>
+        <div class="service-desc">
+          투명교정(얼라이너)부터 세라믹 브라켓까지. 직장인·성인 교정 상담 환영합니다.
+        </div>
+        <span class="service-tag">⭐ 주력 진료</span>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">✨</div>
+        <div class="service-title">치아미백·심미</div>
+        <div class="service-desc">
+          라미네이트, 치아미백으로 자연스럽고 밝은 미소를 되찾아드립니다.
+        </div>
+        <span class="service-tag">심미 치료</span>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">🩺</div>
+        <div class="service-title">충치·신경 치료</div>
+        <div class="service-desc">
+          미세현미경 사용으로 작은 충치도 정밀 진단. 가능하면 치아를 최대한 살립니다.
+        </div>
+        <span class="service-tag">정밀 진단</span>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">🫦</div>
+        <div class="service-title">잇몸(치주) 치료</div>
+        <div class="service-desc">
+          잇몸 질환의 조기 발견과 체계적 관리. 임플란트 전 건강한 잇몸 만들기부터 시작합니다.
+        </div>
+        <span class="service-tag">예방·관리</span>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">👶</div>
+        <div class="service-title">소아·가족 치과</div>
+        <div class="service-desc">
+          처음 치과를 경험하는 어린이도 무섭지 않게. 온 가족이 함께 오실 수 있습니다.
+        </div>
+        <span class="service-tag">가족 진료</span>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── Doctor ── -->
+<section class="doctor" id="doctor">
+  <div class="container doctor-inner">
+    <!-- Photo placeholder -->
+    <div class="doctor-photo-wrap">
+      <div class="doctor-photo">
+        <div style="font-size:5rem;">👨‍⚕️</div>
+        <div class="doctor-photo-label">원장 사진 자리</div>
+      </div>
+      <div class="doctor-badge-float">
+        <span class="badge-icon">🏆</span>
+        <div>
+          <div class="badge-text-main">대한구강악안면임플란트학회</div>
+          <div class="badge-text-sub">정회원</div>
+        </div>
+      </div>
+    </div>
+    <!-- Info -->
+    <div class="doctor-info">
+      <span class="section-label">원장 소개</span>
+      <h2 class="doctor-name">김미소 원장</h2>
+      <div class="doctor-role">치과의사 · 미소드림치과의원 대표원장</div>
+      <div class="doctor-quote">
+        "치과가 무서워서 오래 참았다는 말, 저는 그 말이 가장 마음에 걸립니다.<br>
+        한 번 편안하게 오셔서 이야기 나눠보세요."
+      </div>
+      <ul class="doctor-careers">
+        <li><span class="career-dot"></span>연세대학교 치과대학 졸업</li>
+        <li><span class="career-dot"></span>분당서울대학교병원 치과 수련</li>
+        <li><span class="career-dot"></span>대한구강악안면임플란트학회 정회원</li>
+        <li><span class="career-dot"></span>대한치과교정학회 정회원</li>
+        <li><span class="career-dot"></span>전 서울 대형 네트워크 치과 임플란트 센터장</li>
+        <li><span class="career-dot"></span>판교 미소드림치과의원 개원 (2015~현재)</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ── Hours ── -->
+<section class="hours" id="hours">
+  <div class="container">
+    <span class="section-label">진료 안내</span>
+    <h2 class="section-title">진료시간 &amp; 연락처</h2>
+    <p class="section-sub">예약 없이 오셔도 되지만, 예약하시면 대기 없이 바로 진료받으실 수 있습니다.</p>
+    <div class="hours-inner">
+      <!-- Table -->
+      <div>
+        <table class="hours-table">
+          <thead>
+            <tr><th>요일</th><th>진료 시간</th><th>점심</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="day">월 · 수 · 금</td>
+              <td>09:00 – 18:30</td>
+              <td>13:00 – 14:00</td>
+            </tr>
+            <tr>
+              <td class="day highlight">화 · 목</td>
+              <td class="highlight">09:00 – 19:30 🌙</td>
+              <td>13:00 – 14:00</td>
+            </tr>
+            <tr>
+              <td class="day">토요일</td>
+              <td>09:00 – 14:00</td>
+              <td>없음 (연속)</td>
+            </tr>
+            <tr>
+              <td class="day closed">일 · 공휴일</td>
+              <td class="closed">휴진</td>
+              <td>—</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <!-- Info cards -->
+      <div class="info-cards">
+        <div class="info-card">
+          <div class="info-card-icon">📞</div>
+          <div>
+            <div class="info-card-title">전화 예약</div>
+            <div class="info-card-text">031-000-0000<br><span style="font-size:.82rem;color:var(--muted);font-weight:400">진료시간 중 언제든지 연락 주세요</span></div>
+          </div>
+        </div>
+        <div class="info-card">
+          <div class="info-card-icon">💬</div>
+          <div>
+            <div class="info-card-title">카카오 채널</div>
+            <div class="info-card-text">@미소드림치과<br><span style="font-size:.82rem;color:var(--muted);font-weight:400">빠른 상담·예약 가능</span></div>
+          </div>
+        </div>
+        <div class="info-card">
+          <div class="info-card-icon">🏥</div>
+          <div>
+            <div class="info-card-title">주소</div>
+            <div class="info-card-text">경기도 성남시 분당구 판교로 123<br>○○빌딩 5층<br><span style="font-size:.82rem;color:var(--muted);font-weight:400">판교역 3번 출구 도보 3분</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Map ── -->
+<section class="map-section" id="map">
+  <div class="container">
+    <span class="section-label">오시는길</span>
+    <h2 class="section-title">찾아오시기 쉽습니다</h2>
+    <p class="section-sub">판교역 3번 출구에서 걸어서 3분, 건물 내 주차 가능합니다.</p>
+    <div class="map-inner">
+      <!-- Map placeholder -->
+      <div class="map-placeholder">
+        <div class="map-pin" style="z-index:1;">📍</div>
+        <div class="map-label">지도 자리 (카카오맵·네이버지도 연동 예정)</div>
+        <div class="map-hint">판교역 3번 출구 도보 3분</div>
+      </div>
+      <!-- Access info -->
+      <div class="map-info-list">
+        <div class="map-info-item">
+          <div class="map-info-icon">🚇</div>
+          <div>
+            <div class="map-info-title">지하철</div>
+            <div class="map-info-text">신분당선 판교역 3번 출구<br>도보 약 3분</div>
+          </div>
+        </div>
+        <div class="map-info-item">
+          <div class="map-info-icon">🚌</div>
+          <div>
+            <div class="map-info-title">버스</div>
+            <div class="map-info-text">판교역 정류장 하차<br>○○번, ○○번, ○○번</div>
+          </div>
+        </div>
+        <div class="map-info-item">
+          <div class="map-info-icon">🚗</div>
+          <div>
+            <div class="map-info-title">자가용 / 주차</div>
+            <div class="map-info-text">건물 지하 주차장 이용 가능<br>진료 시 1시간 무료 지원</div>
+          </div>
+        </div>
+        <div class="map-info-item">
+          <div class="map-info-icon">🏢</div>
+          <div>
+            <div class="map-info-title">주소</div>
+            <div class="map-info-text">경기도 성남시 분당구 판교로 123<br>○○빌딩 5층</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CTA Banner ── -->
+<section class="cta-section">
+  <div class="container">
+    <h2 class="cta-title">오늘 딱 한 번만<br>용기 내어 보세요 🦷</h2>
+    <p class="cta-desc">첫 상담은 부담 없이 — 치료 여부와 상관없이 편하게 여쭤보셔도 됩니다.</p>
+    <div class="cta-buttons">
+      <button class="btn-white" onclick="alert('예약 기능은 실제 사이트에서 연동합니다.')">
+        📞 전화 예약  031-000-0000
+      </button>
+      <button class="btn-outline" onclick="alert('카카오 채널 연동 예정입니다.')">
+        💬 카카오 상담
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- ── Footer ── -->
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-logo">🦷 미소드림치과의원</div>
+        <div class="footer-copy">
+          대표원장 김미소 &nbsp;|&nbsp; 사업자번호 000-00-00000<br>
+          경기도 성남시 분당구 판교로 123, ○○빌딩 5층<br>
+          TEL 031-000-0000
+        </div>
+      </div>
+      <div class="footer-links">
+        <a href="#">개인정보처리방침</a>
+        <a href="#">이용약관</a>
+        <a href="#top">맨 위로 ↑</a>
+      </div>
+    </div>
+    <hr class="footer-divider">
+    <div class="footer-bottom">
+      © 2025 미소드림치과의원. 이 사이트는 워크숍 데모용입니다.<br>
+      의료광고 심의 전 실제 게시 금지 · 과장·보장 표현 미포함
+    </div>
+  </div>
+</footer>
+
+<!-- ── Floating CTA ── -->
+<div class="float-cta">
+  <button class="float-btn kakao" onclick="alert('카카오 채널 연동 예정입니다.')">
+    💬 카카오 상담
+  </button>
+  <button class="float-btn" onclick="alert('전화 예약: 031-000-0000')">
+    📞 전화 예약
+  </button>
+</div>
+
+<script>
+  // GNB shadow on scroll
+  const gnb = document.querySelector('.gnb');
+  window.addEventListener('scroll', () => {
+    gnb.style.boxShadow = window.scrollY > 10
+      ? '0 2px 16px rgba(26,53,87,.12)'
+      : 'none';
+  });
+</script>
+
+</body>
+</html>
